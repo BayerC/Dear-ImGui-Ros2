@@ -3,7 +3,7 @@
 <package format="3">
   <name>imgui_ros2_listener</name>
   <version>0.1.0</version>
-  <description>Minimal ROS2 + Dear ImGui listener example</description>
+  <description>Modern C++17 ROS2 + Dear ImGui listener with thread-safe message handling</description>
   <maintainer email="user@example.com">user</maintainer>
   <license>MIT</license>
 
@@ -11,7 +11,7 @@
 
   <depend>rclcpp</depend>
   <depend>std_msgs</depend>
-  
+
   <depend>libglfw3-dev</depend>
 
   <export>

@@ -3,24 +3,32 @@
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/string.hpp>
 
+#include <mutex>
 #include <string>
 
-namespace imgui_ros2 {
+namespace imgui_ros2
+{
 
-class RosListener final : public rclcpp::Node {
+class RosListener final : public rclcpp::Node
+{
 public:
-    RosListener();
+  explicit RosListener(const std::string & topic_name);
 
-    [[nodiscard]] const std::string& get_last_message() const noexcept { 
-        return last_message_; 
-    }
+  [[nodiscard]] std::string get_last_message() const;
+
+  [[nodiscard]] const std::string & get_topic_name() const noexcept
+  {
+    return topic_name_;
+  }
 
 private:
-    void message_callback(std_msgs::msg::String::SharedPtr msg);
+  void message_callback(std_msgs::msg::String::SharedPtr msg);
 
-    rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription_;
-    std::string last_message_;
+  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription_;
+  std::string topic_name_;
+  mutable std::mutex message_mutex_;
+  std::string last_message_;
 };
 
-} // namespace imgui_ros2
+}  // namespace imgui_ros2
 

@@ -9,9 +9,34 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Compiler warnings
+# Compiler warnings and options
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-  add_compile_options(-Wall -Wextra -Wpedantic)
+  add_compile_options(
+    -Wall
+    -Wextra
+    -Wpedantic
+    -Wshadow
+    -Wnon-virtual-dtor
+    -Wold-style-cast
+    -Wcast-align
+    -Wunused
+    -Woverloaded-virtual
+    -Wconversion
+    -Wsign-conversion
+    -Wnull-dereference
+    -Wdouble-promotion
+    -Wformat=2
+  )
+  
+  if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+    add_compile_options(
+      -Wmisleading-indentation
+      -Wduplicated-cond
+      -Wduplicated-branches
+      -Wlogical-op
+      -Wuseless-cast
+    )
+  endif()
 endif()
 
 # Find ROS2 dependencies
@@ -44,7 +69,7 @@ add_library(imgui STATIC
   ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
 )
 
-target_include_directories(imgui PUBLIC
+target_include_directories(imgui SYSTEM PUBLIC
   $<BUILD_INTERFACE:${imgui_SOURCE_DIR}>
   $<BUILD_INTERFACE:${imgui_SOURCE_DIR}/backends>
 )
@@ -57,6 +82,11 @@ target_link_libraries(imgui PUBLIC
 target_compile_definitions(imgui PUBLIC
   IMGUI_IMPL_OPENGL_LOADER_GLAD=0
 )
+
+# Disable warnings for third-party library
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+  target_compile_options(imgui PRIVATE -w)
+endif()
 
 # Main executable
 add_executable(imgui_listener
@@ -76,8 +106,12 @@ ament_target_dependencies(imgui_listener
   std_msgs
 )
 
+# Enable threading support
+find_package(Threads REQUIRED)
+
 target_link_libraries(imgui_listener
   imgui
+  Threads::Threads
 )
 
 # Installation

@@ -1,12 +1,11 @@
 #pragma once
 
-#include <string_view>
-
-namespace imgui_ros2 {
+namespace imgui_ros2
+{
 
 class RosListener;
 
-void render_ui(const RosListener& node, std::string_view topic_name);
+void render_ui(const RosListener & node) noexcept;
 
-} // namespace imgui_ros2
+}  // namespace imgui_ros2
 
