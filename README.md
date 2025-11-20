@@ -89,12 +89,29 @@ A window will open displaying the messages received from the `/chatter` topic.
 
 ```
 .
-├── CMakeLists.txt          # Build configuration with FetchContent for ImGui
-├── package.xml             # ROS2 package manifest
+├── CMakeLists.txt                      # Build configuration with FetchContent for ImGui
+├── package.xml                         # ROS2 package manifest
+├── include/
+│   └── imgui_ros2_listener/
+│       ├── imgui_context.hpp           # GLFW and ImGui RAII wrappers
+│       ├── ros_listener.hpp            # ROS2 subscriber node
+│       └── ui_renderer.hpp             # ImGui UI rendering
 ├── src/
-│   └── imgui_listener.cpp  # Main node implementation
+│   ├── main.cpp                        # Application entry point
+│   ├── imgui_context.cpp               # GLFW/ImGui context implementation
+│   ├── ros_listener.cpp                # ROS2 listener implementation
+│   └── ui_renderer.cpp                 # UI rendering implementation
 └── README.md
 ```
+
+## Architecture
+
+The code is organized into three main modules:
+
+1. **ImGui Context** (`imgui_context.*`) - RAII wrappers for GLFW and ImGui lifecycle
+2. **ROS Listener** (`ros_listener.*`) - ROS2 node that subscribes to topics
+3. **UI Renderer** (`ui_renderer.*`) - Renders the ImGui interface
+4. **Main** (`main.cpp`) - Ties everything together with the main loop
 
 ## License
 

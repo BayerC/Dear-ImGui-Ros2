@@ -1,11 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 project(imgui_ros2_listener VERSION 0.1.0 LANGUAGES CXX)
 
-# Set OpenGL preference to GLVND
-if(POLICY CMP0072)
-  cmake_policy(SET CMP0072 NEW)
-endif()
-
 # C++17 standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -61,10 +56,16 @@ target_compile_definitions(imgui PUBLIC
 )
 
 # Main executable
-add_executable(imgui_listener src/imgui_listener.cpp)
+add_executable(imgui_listener
+  src/main.cpp
+  src/imgui_context.cpp
+  src/ros_listener.cpp
+  src/ui_renderer.cpp
+)
 
 target_include_directories(imgui_listener PRIVATE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
 )
 
 ament_target_dependencies(imgui_listener
