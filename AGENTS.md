@@ -1,0 +1,6 @@
+- Follow Ros2 style guide: https://docs.ros.org/en/jazzy/The-ROS2-Project/Contributing/Code-Style-Language-Versions.html#id2
+- Use modern C++17 code
+- Use modern cmake
+- Follow const correctness
+- Follow Cpp Core Guidelines: https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
+- Prefer using std::algorithms, except std::for_each (use ranged based for loop)

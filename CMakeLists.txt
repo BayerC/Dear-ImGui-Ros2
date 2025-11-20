@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.14)
 project(imgui_ros2_listener VERSION 0.1.0 LANGUAGES CXX)
 
+# Export compile commands for language servers (clangd, etc.)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # C++17 standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

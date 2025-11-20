@@ -35,6 +35,9 @@ rosdep install --from-paths . --ignore-src -y
 # Build the package
 colcon build
 
+# Create symlink for IDE intellisense (optional, for Cursor/VSCode/clangd)
+ln -sf build/imgui_ros2_listener/compile_commands.json compile_commands.json
+
 # Source the workspace
 source install/setup.bash
 ```
