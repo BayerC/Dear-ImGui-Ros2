@@ -1,29 +1,20 @@
 # ROS2 + Dear ImGui Minimal Example
 
-A minimal example of integrating Dear ImGui with ROS2 to display messages from the `/chatter` topic in a GUI window.
+A minimal, modern C++17 example of integrating Dear ImGui with ROS2 to display messages from the `/chatter` topic in a GUI window.
 
 ## Features
 
-- ROS2 node subscribing to `/chatter` topic
-- Dear ImGui window displaying received messages
-- Minimal C++17 implementation
-- Automatic Dear ImGui dependency fetching via CMake
+- **Modern C++17**: RAII, `constexpr`, structured bindings, `[[nodiscard]]`, `noexcept`
+- **Modern CMake**: Target-based approach, proper library creation, generator expressions
+- **Clean architecture**: Separate concerns with dedicated RAII wrapper classes
+- **Exception safety**: Proper resource management and error handling
+- **ROS2 integration**: Subscribes to `/chatter` topic with real-time message display
+- **Dear ImGui**: Automatically fetched via CMake FetchContent
 
 ## Dependencies
 
-### System Dependencies
-```bash
-sudo apt update
-sudo apt install -y \
-  libglfw3-dev \
-  libgl1-mesa-dev \
-  libglu1-mesa-dev
-```
-
-### ROS2 Dependencies
 - ROS2 (Humble, Iron, or Jazzy recommended)
-- `rclcpp`
-- `std_msgs`
+- All system dependencies are declared in `package.xml` and managed via `rosdep`
 
 ## Building
 
@@ -31,8 +22,17 @@ sudo apt install -y \
 # Source your ROS2 installation
 source /opt/ros/<your-ros2-distro>/setup.bash
 
-# Build the package
+# Initialize rosdep (first time only)
+sudo rosdep init
+rosdep update
+
+# Navigate to workspace root
 cd /home/noxem/workspace/Dear-ImGui-Ros2
+
+# Install dependencies using rosdep (the ROS2 way)
+rosdep install --from-paths . --ignore-src -y
+
+# Build the package
 colcon build
 
 # Source the workspace
@@ -58,10 +58,32 @@ A window will open displaying the messages received from the `/chatter` topic.
 
 ## How It Works
 
-1. The node subscribes to the `/chatter` topic (same as `demo_nodes_cpp talker` publishes to)
-2. Received messages are stored and displayed in the Dear ImGui window
-3. The ImGui window updates in real-time as new messages arrive
-4. The node integrates ROS2 spinning with the GLFW/ImGui render loop
+1. **RAII wrappers** manage GLFW and ImGui lifecycles automatically
+2. The node subscribes to the `/chatter` topic (same as `demo_nodes_cpp talker` publishes to)
+3. Received messages are stored and displayed in the Dear ImGui window in real-time
+4. The main loop integrates ROS2 spinning with the GLFW/ImGui render loop
+5. All resources are cleaned up automatically via RAII destructors
+
+## Modern C++ Features Used
+
+- **RAII classes**: `GLFWContext` and `ImGuiContext` for automatic resource management
+- **`constexpr`**: Compile-time constants for configuration
+- **Structured bindings**: Elegant tuple unpacking for framebuffer size
+- **`[[nodiscard]]`**: Prevent ignoring important return values
+- **`noexcept`**: Mark non-throwing functions for optimization
+- **`final`**: Prevent unintended inheritance
+- **Lambda captures**: Clean callback implementations
+- **Exception handling**: Proper error propagation
+- **Anonymous namespace**: Internal linkage for constants
+
+## Modern CMake Features Used
+
+- **Target-based design**: ImGui as a proper CMake library target
+- **Generator expressions**: `$<BUILD_INTERFACE>` and `$<INSTALL_INTERFACE>`
+- **`PRIVATE`/`PUBLIC`**: Proper dependency propagation
+- **Interface includes**: Clean include directory management
+- **Version specification**: Semantic versioning in project declaration
+- **Shallow clone**: Faster ImGui fetching with `GIT_SHALLOW`
 
 ## Project Structure
 
