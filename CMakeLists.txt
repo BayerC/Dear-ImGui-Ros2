@@ -91,6 +91,7 @@ endif()
 # Main executable
 add_executable(imgui_listener
   src/main.cpp
+  src/application.cpp
   src/imgui_context.cpp
   src/ros_listener.cpp
   src/ui_renderer.cpp

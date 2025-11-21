@@ -4,3 +4,5 @@
 - Follow const correctness
 - Follow Cpp Core Guidelines: https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
 - Prefer using std::algorithms, except std::for_each (use ranged based for loop)
+- Dont add comments
+- Always initialize with {} instead of (), e.g. float value{};

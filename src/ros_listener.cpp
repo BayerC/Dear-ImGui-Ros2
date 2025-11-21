@@ -11,12 +11,16 @@ constexpr size_t kQueueSize = 10;
 constexpr char kDefaultMessage[] = "Waiting for messages...";
 }  // namespace
 
+std::unique_ptr<RosListener> RosListener::create(const std::string & topic_name)
+{
+  return std::unique_ptr<RosListener>(new RosListener(topic_name));
+}
+
 RosListener::RosListener(const std::string & topic_name)
 : Node("imgui_listener"),
   topic_name_(topic_name),
   last_message_(kDefaultMessage)
 {
-  // Use reliable QoS for guaranteed message delivery
   auto qos = rclcpp::QoS(rclcpp::KeepLast(kQueueSize))
     .reliable()
     .durability_volatile();
@@ -28,10 +32,22 @@ RosListener::RosListener(const std::string & topic_name)
       message_callback(std::move(msg));
     });
 
+  node_handle_ = shared_from_this();
+
   RCLCPP_INFO(
     get_logger(),
     "ROS2 listener node initialized, subscribing to /%s",
     topic_name_.c_str());
+}
+
+void RosListener::spin()
+{
+  rclcpp::spin_some(node_handle_);
+}
+
+bool RosListener::is_running() noexcept
+{
+  return rclcpp::ok();
 }
 
 void RosListener::message_callback(std_msgs::msg::String::SharedPtr msg)
